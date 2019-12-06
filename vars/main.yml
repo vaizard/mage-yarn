@@ -7,6 +7,8 @@ yarn_repositories:
 
 yarn_dependencies_pre:
   - apt-transport-https
+  - nodejs
+  - build-essential
 
 yarn_dependencies:
   - yarn
