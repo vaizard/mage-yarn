@@ -1,21 +1,26 @@
 # tasks file for yarn
 ---
+- name: Add nodesource apt_keys
+  apt_key:
+    url: "https://deb.nodesource.com/gpgkey/nodesource.gpg.key"
+    state: present
+
+- apt_repository:
+    repo: "deb https://deb.nodesource.com/node_{{ nodejs_major_version }}.x {{ ansible_distribution_release }} main"
+    state: present
+
 - name: repository | install dependencies (pre)
   apt:
     name: "{{ yarn_dependencies_pre }}"
     state: "{{ apt_install_state | default('latest') }}"
     update_cache: true
     cache_valid_time: "{{ apt_update_cache_valid_time | default(3600) }}"
-  tags:
-    - yarn-repository-install-dependencies
 
 - name: repository | add public key
   apt_key:
     id: 1646B01B86E50310
     url: https://dl.yarnpkg.com/debian/pubkey.gpg
     state: present
-  tags:
-    - yarn-repository-public-key
 
 - name: repository | add
   apt_repository:
@@ -23,5 +28,3 @@
     state: present
     update_cache: true
   with_items: "{{ yarn_repositories }}"
-  tags:
-    - yarn-repository-add
